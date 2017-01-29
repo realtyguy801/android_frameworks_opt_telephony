@@ -3587,7 +3587,11 @@ public class ServiceStateTracker extends Handler {
      * @return true if same operator
      */
     private boolean isSameNamedOperators(ServiceState s) {
-        return currentMccEqualsSimMcc(s) && isSameOperatorNameFromSimAndSS(s);
+        // Add national roaming and make it optional
+        boolean mvnoRoaming = Settings.System.getInt(mPhone.getContext().getContentResolver(),
+                Settings.System.MVNO_ROAMING, 0) == 1;
+
+        return currentMccEqualsSimMcc(s) && (isSameOperatorNameFromSimAndSS(s) || mvnoRoaming);
     }
 
     /**
